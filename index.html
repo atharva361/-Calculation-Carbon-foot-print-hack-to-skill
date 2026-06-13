@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aether // Premium Carbon Footprint Calculator</title>
+  <meta name="description" content="Calculate, track, and offset your transport carbon footprint using our advanced, modern interactive dashboard.">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Decorative Orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#logo-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 17L12 22L22 17" stroke="url(#logo-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 12L12 17L22 12" stroke="url(#logo-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#10b981" />
+              <stop offset="1" stop-color="#06b6d4" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="logo-text">AETHER</span>
+        <span class="logo-badge">CARBON TRACKER</span>
+      </div>
+      <div class="header-actions">
+        <button id="reset-app-btn" class="btn btn-secondary flex-center">
+          <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          </svg>
+          Reset All
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <!-- Calculator Inputs Card (Left) -->
+      <section class="card calculator-card">
+        <div class="card-header">
+          <h2>Calculate Transport Footprint</h2>
+          <p class="subtitle">Input your travel habits to calculate your weekly carbon emissions.</p>
+        </div>
+
+        <!-- Category Tabs Navigation -->
+        <nav class="tabs-nav">
+          <button class="tab-btn active" data-tab="road">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="3" width="22" height="13" rx="2" ry="2"/>
+              <path d="M7 21h0M17 21h0M9 21h6"/>
+            </svg>
+            Road Travel
+          </button>
+          <button class="tab-btn" data-tab="transit">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+              <path d="M12 18h0M8 6h8M6 10h12M8 14h8"/>
+            </svg>
+            Public Transit
+          </button>
+          <button class="tab-btn" data-tab="air">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.8 19.2L16 11l3.5-3.5C20 7 21 8 21 9.5c0 .7-.3 1.3-.8 1.8L16.5 15l1.3 4.2zM6.2 4.8L8 13l-3.5 3.5C4 17 3 16 3 14.5c0-.7.3-1.3.8-1.8L7.5 9 6.2 4.8z"/>
+              <path d="M2 22l20-20M19 19c-2.5 0-6-3-9.5-6.5S3 6 3 3.5"/>
+            </svg>
+            Air Travel
+          </button>
+          <button class="tab-btn" data-tab="eco">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10M12 2L9 5M12 2l3 5"/>
+            </svg>
+            Active & Eco
+          </button>
+        </nav>
+
+        <!-- Tab Content Wrapper -->
+        <div class="tabs-content">
+          <!-- 1. Road Travel Form -->
+          <div class="tab-pane active" id="tab-road">
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="road-vehicle-type">Vehicle Engine Type</label>
+                <div class="select-wrapper">
+                  <select id="road-vehicle-type">
+                    <option value="none">No Private Car / Motorcycle</option>
+                    <option value="petrol-medium">Petrol Car (Medium/SUV)</option>
+                    <option value="petrol-small">Petrol Car (Small/Hatchback)</option>
+                    <option value="diesel">Diesel Car</option>
+                    <option value="hybrid">Hybrid Car (HEV/PHEV)</option>
+                    <option value="electric">Electric Vehicle (EV)</option>
+                    <option value="motorbike">Motorcycle / Scooter</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group vehicle-dependent">
+                <label for="road-distance">Weekly Distance</label>
+                <div class="input-range-container">
+                  <input type="number" id="road-distance-num" min="0" max="2000" value="50">
+                  <span class="unit">km</span>
+                </div>
+                <input type="range" id="road-distance" min="0" max="500" step="5" value="50" class="slider">
+              </div>
+
+              <div class="form-group vehicle-dependent">
+                <label for="road-passengers">Average Occupants</label>
+                <div class="select-wrapper">
+                  <select id="road-passengers">
+                    <option value="1">Driver Only (1 person)</option>
+                    <option value="2">2 People</option>
+                    <option value="3">3 People</option>
+                    <option value="4">4+ People</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group full-width vehicle-dependent">
+                <label for="road-efficiency">Vehicle Efficiency (Optional - Litres/100km)</label>
+                <div class="input-range-container">
+                  <input type="number" id="road-efficiency" min="1" max="25" value="7.5" step="0.1">
+                  <span class="unit">L/100km</span>
+                </div>
+                <span class="tip-text">Leave as default for standard EPA calculations based on selected engine.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Public Transit Form -->
+          <div class="tab-pane" id="tab-transit">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="transit-bus">Weekly Bus Travel</label>
+                <div class="input-range-container">
+                  <input type="number" id="transit-bus-num" min="0" max="1000" value="0">
+                  <span class="unit">km</span>
+                </div>
+                <input type="range" id="transit-bus" min="0" max="200" step="2" value="0" class="slider">
+              </div>
+
+              <div class="form-group">
+                <label for="transit-train">Weekly Train / Rail Travel</label>
+                <div class="input-range-container">
+                  <input type="number" id="transit-train-num" min="0" max="1000" value="0">
+                  <span class="unit">km</span>
+                </div>
+                <input type="range" id="transit-train" min="0" max="300" step="5" value="0" class="slider">
+              </div>
+
+              <div class="form-group full-width">
+                <label for="transit-metro">Weekly Metro / Subway / Tram</label>
+                <div class="input-range-container">
+                  <input type="number" id="transit-metro-num" min="0" max="1000" value="0">
+                  <span class="unit">km</span>
+                </div>
+                <input type="range" id="transit-metro" min="0" max="150" step="1" value="0" class="slider">
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Air Travel Form -->
+          <div class="tab-pane" id="tab-air">
+            <p class="section-desc">Air emissions are calculated annually and averaged into weekly values to maintain dashboard consistency.</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="air-short">Short Flights (Under 3 hrs)</label>
+                <div class="counter-input">
+                  <button type="button" class="counter-btn dec" data-target="air-short">-</button>
+                  <input type="number" id="air-short" min="0" max="50" value="0">
+                  <button type="button" class="counter-btn inc" data-target="air-short">+</button>
+                </div>
+                <span class="tip-text">e.g., Domestic, regional flights (~750 km each way)</span>
+              </div>
+
+              <div class="form-group">
+                <label for="air-medium">Medium Flights (3-6 hrs)</label>
+                <div class="counter-input">
+                  <button type="button" class="counter-btn dec" data-target="air-medium">-</button>
+                  <input type="number" id="air-medium" min="0" max="30" value="0">
+                  <button type="button" class="counter-btn inc" data-target="air-medium">+</button>
+                </div>
+                <span class="tip-text">e.g., Transcontinental (~2500 km each way)</span>
+              </div>
+
+              <div class="form-group">
+                <label for="air-long">Long Flights (6+ hrs)</label>
+                <div class="counter-input">
+                  <button type="button" class="counter-btn dec" data-target="air-long">-</button>
+                  <input type="number" id="air-long" min="0" max="20" value="0">
+                  <button type="button" class="counter-btn inc" data-target="air-long">+</button>
+                </div>
+                <span class="tip-text">e.g., Intercontinental (~8000 km each way)</span>
+              </div>
+
+              <div class="form-group">
+                <label for="air-class">Seat Class</label>
+                <div class="select-wrapper">
+                  <select id="air-class">
+                    <option value="economy">Economy Class (Standard)</option>
+                    <option value="premium">Premium Economy (1.5x footprint)</option>
+                    <option value="business">Business Class (2.9x footprint)</option>
+                    <option value="first">First Class (4.0x footprint)</option>
+                  </select>
+                </div>
+                <span class="tip-text">Premium seating occupies more physical space on the aircraft.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Active & Eco Form -->
+          <div class="tab-pane" id="tab-eco">
+            <p class="section-desc">Active travel releases zero carbon. Entering distance here shows calories burned and offsets compared to standard car trips!</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="eco-walking">Weekly Walking</label>
+                <div class="input-range-container">
+                  <input type="number" id="eco-walking-num" min="0" max="200" value="0">
+                  <span class="unit">km</span>
+                </div>
+                <input type="range" id="eco-walking" min="0" max="50" step="1" value="0" class="slider">
+              </div>
+
+              <div class="form-group">
+                <label for="eco-biking">Weekly Bicycling</label>
+                <div class="input-range-container">
+                  <input type="number" id="eco-biking-num" min="0" max="500" value="0">
+                  <span class="unit">km</span>
+                </div>
+                <input type="range" id="eco-biking" min="0" max="150" step="2" value="0" class="slider">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="calculator-actions">
+          <div class="save-input-group">
+            <input type="text" id="save-label" placeholder="e.g., My Regular Commute" class="form-input text-input">
+            <button id="save-calc-btn" class="btn btn-primary">Save Profile</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dashboard Results (Right) -->
+      <section class="dashboard-area">
+        <!-- Main Footprint Score Card -->
+        <div class="card result-card">
+          <div class="score-container">
+            <div class="score-display">
+              <div class="score-wrapper">
+                <span class="score-label">ANNUALIZED CO₂ EMISSIONS</span>
+                <span id="co2-total" class="score-value">0.00</span>
+                <span class="score-unit">Metric Tonnes</span>
+              </div>
+            </div>
+            <div class="quick-stats">
+              <div class="stat-box">
+                <span class="stat-val" id="co2-weekly">0.0</span>
+                <span class="stat-lbl">kg CO₂e/week</span>
+              </div>
+              <div class="stat-box highlight">
+                <span class="stat-val" id="eco-savings">0.0</span>
+                <span class="stat-lbl">kg CO₂e saved</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-val" id="calories-burned">0</span>
+                <span class="stat-lbl">kcal burned</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Card -->
+        <div class="card chart-card">
+          <h3>Emissions Source Allocation</h3>
+          <div class="chart-container">
+            <canvas id="emissions-chart"></canvas>
+            <div id="chart-empty-state" class="empty-state">
+              <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 20h9M3 20h9M12 4v16M4 8l4-4 4 4M12 12l4-4 4 4"/>
+              </svg>
+              <p>Add some transport distance to populate the emissions chart</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparative Benchmarks Card -->
+        <div class="card comparison-card">
+          <h3>Global & Paris Targets Comparisons</h3>
+          <div class="comparison-list">
+            <!-- Paris Agreement Target -->
+            <div class="comparison-item">
+              <div class="comp-info">
+                <span class="comp-name">Paris Climate Goal Target (Yearly)</span>
+                <span class="comp-val">2.00 t</span>
+              </div>
+              <div class="comp-bar-bg">
+                <div class="comp-bar" id="bar-paris" style="width: 0%"></div>
+              </div>
+            </div>
+            <!-- Global Average -->
+            <div class="comparison-item">
+              <div class="comp-info">
+                <span class="comp-name">Global Per-Capita Average</span>
+                <span class="comp-val">4.70 t</span>
+              </div>
+              <div class="comp-bar-bg">
+                <div class="comp-bar" id="bar-global" style="width: 0%"></div>
+              </div>
+            </div>
+            <!-- Your footprint comparison dynamic marker -->
+            <div class="comparison-item user-item">
+              <div class="comp-info">
+                <span class="comp-name">Your Estimated Annual Footprint</span>
+                <span class="comp-val highlight" id="bar-user-val">0.00 t</span>
+              </div>
+              <div class="comp-bar-bg">
+                <div class="comp-bar highlight-bar" id="bar-user" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive What-If Offset Simulator -->
+        <div class="card simulator-card">
+          <div class="simulator-header">
+            <h3>🌱 Offset & Action Simulator</h3>
+            <span class="badge">SIMULATION</span>
+          </div>
+          <p class="subtitle">Drag the sliders to see how adopting greener choices reduces your projected footprint.</p>
+          
+          <div class="slider-grid">
+            <div class="sim-group">
+              <div class="sim-label-row">
+                <label for="sim-ev">Switch Car trips to Electric (EV)</label>
+                <span class="sim-val" id="sim-ev-val">0%</span>
+              </div>
+              <input type="range" id="sim-ev" min="0" max="100" step="5" value="0" class="slider green-slider">
+            </div>
+
+            <div class="sim-group">
+              <div class="sim-label-row">
+                <label for="sim-active">Switch Car trips to Walking/Cycling</label>
+                <span class="sim-val" id="sim-active-val">0%</span>
+              </div>
+              <input type="range" id="sim-active" min="0" max="100" step="5" value="0" class="slider green-slider">
+            </div>
+          </div>
+
+          <div class="sim-outcome">
+            <div class="outcome-block">
+              <span class="outcome-label">POTENTIAL YEARLY REDUCTION</span>
+              <span id="sim-reduction" class="outcome-value">0.00 t CO₂e</span>
+            </div>
+            <div class="outcome-block">
+              <span class="outcome-label">EQUIVALENT TREES PLANTED</span>
+              <span id="sim-trees" class="outcome-value">0 Trees</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profiles & History Card -->
+        <div class="card history-card">
+          <div class="history-header">
+            <h3>Saved Profiles & Weekly Commutes</h3>
+            <button id="clear-history-btn" class="btn btn-text">Clear All</button>
+          </div>
+          <div id="history-list" class="history-list">
+            <!-- Dynamically populated profiles will appear here -->
+            <div id="history-empty" class="empty-state">
+              <p>No saved travel profiles yet.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>&copy; 2026 Aether. Powered by verified emissions databases. Make sustainable choices today.</p>
+      <div class="footer-links">
+        <a href="https://github.com/atharva361/project" target="_blank" rel="noopener">GitHub Project</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
